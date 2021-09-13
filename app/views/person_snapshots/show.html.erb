@@ -1,0 +1,24 @@
+<div class="page-header">
+  <%= link_to person_snapshots_path, class: 'btn btn-default' do %>
+    All Person_snapshots
+  <% end %>
+  <%= link_to edit_person_snapshot_path(@person_snapshot), class: 'btn btn-primary' do %>
+    Edit
+  <% end %>
+  <h1>Show person_snapshot</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Meta:</dt>
+  <dd><%= @person_snapshot.meta_id %></dd>
+  <dt>Effective at:</dt>
+  <dd><%= @person_snapshot.effective_at %></dd>
+  <dt>First name:</dt>
+  <dd><%= @person_snapshot.first_name %></dd>
+  <dt>Last name:</dt>
+  <dd><%= @person_snapshot.last_name %></dd>
+  <dt>Title:</dt>
+  <dd><%= @person_snapshot.title %></dd>
+  <dt>Manager:</dt>
+  <dd><%= @person_snapshot.manager_id %></dd>
+</dl>

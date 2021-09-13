@@ -1,0 +1,59 @@
+<%= form_with(model: person_snapshot, local: true) do |form| %>
+  <% if person_snapshot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(person_snapshot.errors.count, "error") %> prohibited this person_snapshot from being saved:</h2>
+
+      <ul>
+      <% person_snapshot.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :meta_id, class: 'form-label' %>
+      <%= form.text_field :meta_id, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <%= form.label :effective_at, class: 'form-label' %>
+      <%= form.datetime_select :effective_at, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <%= form.label :first_name, class: 'form-label' %>
+      <%= form.text_field :first_name, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <%= form.label :last_name, class: 'form-label' %>
+      <%= form.text_field :last_name, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <%= form.label :title, class: 'form-label' %>
+      <%= form.text_field :title, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <%= form.label :manager_id, class: 'form-label' %>
+      <%= form.number_field :manager_id, class: 'form-control' %>
+    </div>
+
+  <div class="mb-3">
+    <% if person_snapshot.persisted? %>
+      <div class="float-end">
+        <%= link_to 'Destroy', person_snapshot, method: :delete, class: "text-danger", data: { confirm: 'Are you sure?' } %>
+      </div>
+    <% end %>
+
+    <%= form.submit class: 'btn btn-primary' %>
+
+    <% if person_snapshot.persisted? %>
+      <%= link_to "Cancel", person_snapshot, class: "btn btn-link" %>
+    <% else %>
+      <%= link_to "Cancel", person_snapshots_path, class: "btn btn-link" %>
+    <% end %>
+  </div>
+<% end %>
