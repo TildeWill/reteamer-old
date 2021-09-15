@@ -5,7 +5,7 @@ module People
         first_name: attributes[:first_name],
         last_name: attributes[:last_name],
         title: attributes[:title],
-        manager_id: attributes[:manager]&.send(:model)&.id
+        supervisor_id: attributes[:supervisor]&.send(:model)&.id
       })
       model.meta = Meta.new_prototype(effective_date)
       model.save
@@ -18,6 +18,15 @@ module People
                   .select("DISTINCT proto_id, *")
                   .where(effective_at: 30.years.ago..effective_date.end_of_day)
                   .order(effective_at: :desc)
+    models.map{ |model| Person.new_from_model(model) }
+  end
+
+  def self.roots(effective_date)
+    models = Model
+               .select("DISTINCT proto_id, *")
+               .where(effective_at: 30.years.ago..effective_date.end_of_day)
+               .order(effective_at: :desc)
+               .roots
     models.map{ |model| Person.new_from_model(model) }
   end
 end

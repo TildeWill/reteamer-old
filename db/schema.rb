@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_043318) do
     t.string "first_name"
     t.string "last_name"
     t.string "title"
-    t.integer "manager_id"
+    t.integer "supervisor_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

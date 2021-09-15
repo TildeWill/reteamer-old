@@ -14,12 +14,12 @@ module People
       person
     end
 
-    def manager
-      Person.new_from_model(model.manager)
+    def supervisor
+      Person.new_from_model(model.supervisor)
     end
 
-    def reports
-      model.reports.map do |report|
+    def subordinates
+      model.subordinates.map do |report|
         Person.new_from_model(report)
       end
     end
@@ -33,7 +33,7 @@ module People
         first_name: attributes[:first_name] || model.first_name,
         last_name: attributes[:last_name] || model.last_name,
         title: attributes[:title] || model.title,
-        manager_id: attributes[:manager_id] || model.manager_id,
+        supervisor_id: attributes[:supervisor_id] || model.supervisor_id,
       }
       model = Model.new(new_attributes)
 

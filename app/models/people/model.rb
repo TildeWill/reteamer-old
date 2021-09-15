@@ -3,8 +3,10 @@ module People
   class Model < ApplicationRecord
     self.table_name = 'people'
 
-    belongs_to :manager, class_name: "People::Model", optional: true
-    has_many :reports, class_name: "People::Model", foreign_key: :manager_id
+    belongs_to :supervisor, class_name: "People::Model", optional: true
+    has_many :subordinates, class_name: "People::Model", foreign_key: :supervisor_id
+
+    scope :roots, -> { where(supervisor: nil) }
 
     def meta
       @meta ||= Meta.new(proto_id, effective_at)
