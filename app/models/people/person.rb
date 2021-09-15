@@ -50,7 +50,8 @@ module People
         id: id,
         name: [first_name, last_name].join(" "),
         parentId: supervisor.id,
-        title: title
+        title: title,
+        gravatar_hash: Digest::MD5.hexdigest("will.read@gmail.com".strip.downcase)
       }
     end
 
