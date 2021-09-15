@@ -5,7 +5,7 @@ module People
     delegate :first_name, :last_name, :title, to: :model
 
     def id
-      model.proto_id
+      model&.proto_id
     end
 
     def self.new_from_model(model)
@@ -43,6 +43,16 @@ module People
       end
 
       return self
+    end
+
+    def as_json(options = nil)
+      {
+        id: id,
+        first_name: first_name,
+        last_name: last_name,
+        parentId: supervisor.id,
+        title: title
+      }
     end
 
     private
