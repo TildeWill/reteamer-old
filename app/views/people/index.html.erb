@@ -1,0 +1,92 @@
+
+
+
+<div class="row">
+  <div class="col-sm-6">
+    <h1>Org Chart</h1>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
+  <div class="chart-container"></div>
+
+  <script>
+    var chart;
+    var org_data = [
+      {
+        "name": "Troy Anderson",
+        "id": 1,
+        "positionName": "CPIO",
+        "parentId": 5
+      },
+      {
+        "name": "Will Read",
+        "id": 2,
+        "positionName": "Head of Engineering",
+        "parentId": 1
+      },
+      {
+        "name": "Gabe Garrow",
+        "id": 3,
+        "positionName": "Head of Product",
+        "parentId": 1
+      },
+      {
+        "name": "Raquel Breternitz",
+        "id": 4,
+        "positionName": "Head of Design",
+        "parentId": 1
+      },
+      {
+        "name": "Charlie Falcone",
+        "positionName": "CEO",
+        "id": 5,
+        "parentId": null
+      },
+      {
+        "name": "Pat Berka",
+        "id": 6,
+        "positionName": "Architect",
+        "parentId": 2
+      }
+    ]
+      chart = new d3.OrgChart()
+        .container('.chart-container')
+        .data(org_data)
+        .nodeContent(function (d, i, arr, state) {
+          const svgStr = `<svg width=150 height=75  style="background-color:none"> <path d="M 0,15 L15,0 L135,0 L150,15 L150,60 L135,75 L15,75 L0,60" fill="#2599DD" stroke="#2599DD"/> </svg>`
+          return `
+                          <div class="left-top" style="position:absolute;left:-10px;top:-10px">  ${svgStr}</div>
+                          <div class="right-top" style="position:absolute;right:-10px;top:-10px">  ${svgStr}</div>
+                          <div class="right-bottom" style="position:absolute;right:-10px;bottom:-14px">  ${svgStr}</div>
+                          <div class="left-bottom" style="position:absolute;left:-10px;bottom:-14px">  ${svgStr}</div>
+                          <div style="font-family: 'Inter'; background-color:#040910;sans-serif; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px;border-radius:0px;border: 2px solid #2CAAE5">
+
+                             <div class="pie-chart-wrapper" style="margin-left:-10px;margin-top:5px;width:320px;height:300px"></div>
+
+                            <div style="color:#2CAAE5;position:absolute;right:15px;top:-20px;">
+                              <div style="font-size:15px;color:#2CAAE5;margin-top:32px"> ${d.data.name} </div>
+                              <div style="font-size:10px;"> ${d.data.positionName || ''} </div>
+                              <div style="font-size:10px;"> ${d.data.id || ''} </div>
+                              ${d.depth == 0 ? `                              <br/>
+                              <div style="max-width:200px;font-size:10px;">
+                                A corporate history of Ian is a chronological account of a business or other co-operative organization he founded.  <br><br>Usually it is produced in written format but it can also be done in audio or audiovisually
+                              </div>`: ''
+          }
+
+                            </div>
+
+                            <div style="position:absolute;left:-5px;bottom:10px;">
+                              <div style="font-size:10px;color:#2CAAE5;margin-left:20px;margin-top:32px"> Progress </div>
+                              <div style="color:#2CAAE5;margin-left:20px;margin-top:3px;font-size:10px;">
+                                </div>
+                            </div>
+                          </div>
+
+  `;
+        })
+        .render();
+  </script>
+</div>
+
