@@ -4,10 +4,28 @@ module People
     include ActiveModel::Model
     delegate :first_name, :last_name, :title, to: :model
 
+    def id
+      model.proto_id
+    end
+
     def self.new_from_model(model)
       person = Person.new
       person.send(:model=, model)
       person
+    end
+
+    def manager
+      Person.new_from_model(model.manager)
+    end
+
+    def reports
+      model.reports.map do |report|
+        Person.new_from_model(report)
+      end
+    end
+
+    def manager=(manager)
+      model.manager = manager.send(:model)
     end
 
     def update(effective_date, attributes)

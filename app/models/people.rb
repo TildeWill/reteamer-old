@@ -1,7 +1,12 @@
 module People
   def self.create(effective_date, attributes)
     ApplicationRecord.transaction do
-      model = Model.new(attributes)
+      model = Model.new({
+        first_name: attributes[:first_name],
+        last_name: attributes[:last_name],
+        title: attributes[:title],
+        manager_id: attributes[:manager]&.send(:model)&.id
+      })
       model.meta = Meta.new_prototype(effective_date)
       model.save
       Person.new_from_model(model)
