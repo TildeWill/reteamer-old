@@ -15,11 +15,15 @@
   <div class="chart-container"></div>
 
   <script>
-    var chart;
-    var org_data = <%= raw(@flat_org_chart.to_json) %>
-      chart = new d3.OrgChart()
+    let org_data = <%= raw(@flat_org_chart.to_json) %>;
+    let chart = new d3.OrgChart()
         .container('.chart-container')
         .data(org_data)
+        .connections(
+          [
+            { id: 1, from: "008680b1-2c41-429e-a37c-fd4c1263ab11", to: "d07b0568-989a-4453-b8df-45476b7055c4", label: "Mushroom Hunting Team" },
+          ],
+        )
         .nodeContent(function (d, i, arr, state) {
           const svgStr = `<svg width=150 height=75  style="background-color:none"> <path d="M 0,15 L15,0 L135,0 L150,15 L150,60 L135,75 L15,75 L0,60" fill="#2599DD" stroke="#2599DD"/> </svg>`
           return `
@@ -34,6 +38,7 @@
                             <div style="color:#2CAAE5;position:absolute;right:15px;top:-20px;">
                               <div style="font-size:15px;color:#2CAAE5;margin-top:32px"> ${d.data.first_name} ${d.data.last_name} </div>
                               <div style="font-size:10px;"> ${d.data.title || ''} </div>
+                              <div style="font-size:10px;"> ${d.data.id || ''} </div>
                             </div>
 
                             <div style="position:absolute;left:-5px;bottom:10px;">
