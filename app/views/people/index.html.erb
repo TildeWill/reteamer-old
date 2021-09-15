@@ -6,7 +6,7 @@
     <h1>Org Chart</h1>
   </div>
   <div>
-    <form><input type="date" name="effective_date" value="<%= @current_date %>"/><input type="submit" /></form>
+    <form method="get"><input type="date" name="effective_date" value="<%= @current_date %>"/><input type="submit" /></form>
   </div>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -15,8 +15,9 @@
   <div class="chart-container"></div>
 
   <script>
-    let org_data = <%= raw(@flat_org_chart.to_json) %>;
-    let chart = new d3.OrgChart()
+    var chart;
+    var org_data = <%= raw(@flat_org_chart.to_json) %>;
+    chart = new d3.OrgChart()
         .container('.chart-container')
         .data(org_data)
         .connections(
@@ -36,7 +37,7 @@
                              <div class="pie-chart-wrapper" style="margin-left:-10px;margin-top:5px;width:320px;height:300px"></div>
 
                             <div style="color:#2CAAE5;position:absolute;right:15px;top:-20px;">
-                              <div style="font-size:15px;color:#2CAAE5;margin-top:32px"> ${d.data.first_name} ${d.data.last_name} </div>
+                              <div style="font-size:15px;color:#2CAAE5;margin-top:32px"> ${d.data.name} </div>
                               <div style="font-size:10px;"> ${d.data.title || ''} </div>
                               <div style="font-size:10px;"> ${d.data.id || ''} </div>
                             </div>

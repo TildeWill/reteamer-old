@@ -48,8 +48,7 @@ module People
     def as_json(options = nil)
       {
         id: id,
-        first_name: first_name,
-        last_name: last_name,
+        name: [first_name, last_name].join(" "),
         parentId: supervisor.id,
         title: title
       }
