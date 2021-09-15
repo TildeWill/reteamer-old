@@ -1,6 +1,6 @@
-class CreatePersonSnapshots < ActiveRecord::Migration[6.1]
+class CreatePeople < ActiveRecord::Migration[6.1]
   def change
-    create_table :person_snapshots do |t|
+    create_table :people do |t|
       t.string :proto_id
       t.datetime :effective_at
       t.string :first_name

@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_043318) do
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
 
-  create_table "person_snapshots", force: :cascade do |t|
+  create_table "people", force: :cascade do |t|
     t.string "proto_id"
     t.datetime "effective_at"
     t.string "first_name"
