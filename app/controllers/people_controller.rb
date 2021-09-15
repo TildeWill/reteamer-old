@@ -3,8 +3,8 @@ class PeopleController < ApplicationController
 
   # GET /person_snapshots or /person_snapshots.json
   def index
-    @org_chart = People::OrgChart.tree_data(Date.current)
-    @flat_org_chart = People.find_for(Date.current)
+    @current_date = Date.parse(params.fetch(:effective_date, Date.current.iso8601))
+    @flat_org_chart = People.find_for(@current_date)
   end
 
   # # GET /person_snapshots/1 or /person_snapshots/1.json
