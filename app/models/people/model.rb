@@ -7,6 +7,11 @@ module People
     has_many :subordinates, class_name: "People::Model", foreign_key: :supervisor_id
 
     scope :roots, -> { where(supervisor: nil) }
+    scope :find_for, ->(effective_date) {
+          select("DISTINCT proto_id, *")
+         .where(effective_at: 30.years.ago..effective_date.end_of_day)
+         .order(effective_at: :desc)
+    }
 
     def meta
       @meta ||= Meta.new(proto_id, effective_at)

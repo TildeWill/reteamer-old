@@ -5,8 +5,9 @@ RSpec.describe People::OrgChart do
     grand_boss = People.create(Date.current, first_name: "M. Bison", title: "CEO")
     boss = People.create(Date.current, first_name: "Vega", title: "CTO", supervisor: grand_boss)
     other_boss = People.create(Date.current, first_name: "Sagat", title: "CFO", supervisor: grand_boss)
-    underling1 = People.create(Date.current, first_name: "Mario", title: "Staff Plumber", supervisor: boss)
-    underling2 = People.create(Date.current, first_name: "Luigi", title: "Principal Plumber", supervisor: other_boss)
+    present_day_underling = People.create(Date.current, first_name: "Mario", title: "Staff Plumber", supervisor: boss)
+    expect{future_boss_error = People.create(6.days.ago, first_name: "Luigi", title: "Principal Plumber", supervisor: other_boss)}.to raise_error("Supervisor is from the future!!!")
+    future_underling = People.create(6.days.from_now, first_name: "Captain Toad", title: "Adventurer", supervisor: other_boss)
     puts JSON.pretty_generate(People::OrgChart.tree_data(Date.current))
   end
 end

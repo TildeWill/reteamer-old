@@ -2,13 +2,13 @@ module People
   class OrgChart
     def self.tree_data(effective_date)
       People.roots(effective_date).map do |person|
-        data(person)
+        data(person, effective_date)
       end
     end
 
-    def self.data(person)
-      subordinates = person.subordinates.map do |subordinate|
-        data(subordinate)
+    def self.data(person, effective_date)
+      subordinates = person.subordinates(effective_date).map do |subordinate|
+        data(subordinate, effective_date)
       end
 
       {

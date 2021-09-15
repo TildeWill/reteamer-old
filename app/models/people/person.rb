@@ -18,8 +18,8 @@ module People
       Person.new_from_model(model.supervisor)
     end
 
-    def subordinates
-      model.subordinates.map do |report|
+    def subordinates(effective_date)
+      model.subordinates.find_for(effective_date).map do |report|
         Person.new_from_model(report)
       end
     end
