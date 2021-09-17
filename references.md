@@ -1,3 +1,4 @@
 - [Private ActiveRecord](https://kellysutton.com/2019/10/29/taming-large-rails-codebases-with-private-activerecord-models.html)
 - [Tree Structures](https://blog.francium.tech/best-practices-for-handling-hierarchical-data-structure-in-ruby-on-rails-b5830c5ea64d)
 - [Customizable Org Chart using D3](https://www.npmjs.com/package/d3-org-chart)
+- [30 Rock Characters](https://en.wikipedia.org/wiki/List_of_30_Rock_characters)

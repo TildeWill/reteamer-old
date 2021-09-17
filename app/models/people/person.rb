@@ -2,7 +2,7 @@ module People
   # --- Entity for the outside world
   class Person
     include ActiveModel::Model
-    delegate :first_name, :last_name, :title, to: :model
+    delegate :first_name, :last_name, :title, :email, to: :model
 
     def id
       model&.proto_id
@@ -51,7 +51,7 @@ module People
         name: [first_name, last_name].join(" "),
         parentId: supervisor.id,
         title: title,
-        gravatar_hash: Digest::MD5.hexdigest("will.read@gmail.com".strip.downcase)
+        gravatar_hash: Digest::MD5.hexdigest(email&.strip&.downcase || "")
       }
     end
 
