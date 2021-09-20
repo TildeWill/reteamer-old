@@ -17,23 +17,31 @@ RSpec.describe People do
     person.update(2.days.from_now, first_name: "Paulz")
     person.update(1.days.from_now, first_name: "Mary")
 
-    peter = People.find_for(Date.current).first
+    today_people = People.find_for(Date.current)
+    expect(today_people.count).to eq(1)
+    peter = today_people.first
     expect(peter).to be_a(People::Person)
     expect(peter.first_name).to eq("Peter")
     expect(peter.last_name).to eq("Singer")
-    mary = People.find_for(1.days.from_now).first
+
+    one_day_from_now_people = People.find_for(1.days.from_now)
+    expect(one_day_from_now_people.count).to eq(1)
+    mary = one_day_from_now_people.first
     expect(mary.first_name).to eq("Mary")
     expect(mary.last_name).to eq("Singer")
-    paulz = People.find_for(2.days.from_now).first
+
+    two_days_from_now_people = People.find_for(2.days.from_now)
+    expect(two_days_from_now_people.count).to eq(1)
+    paulz = two_days_from_now_people.first
     expect(paulz.first_name).to eq("Paulz")
     expect(paulz.last_name).to eq("Singer")
   end
 
   it "returns the manager as a person" do
     supervisor = People.create(Date.current, first_name: "Michael")
-    subordinate = People.create(Date.current, first_name: "Jim", supervisor: supervisor)
+    subordinate = People.create(Date.current, first_name: "Jim", supervisor_id: supervisor.id)
 
-    expect(subordinate.supervisor.id).to eq(supervisor.id)
-    expect(supervisor.subordinates.map(&:id)).to eq([subordinate.id])
+    expect(subordinate.supervisor_id).to eq(supervisor.id)
+    expect(supervisor.subordinates(Date.current).map(&:id)).to eq([subordinate.id])
   end
 end

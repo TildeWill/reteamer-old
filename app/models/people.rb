@@ -1,18 +1,20 @@
 module People
   def self.create(effective_date, attributes)
     ApplicationRecord.transaction do
-      maybe_supervisor = attributes[:supervisor]&.send(:model)
-      if maybe_supervisor&.effective_at && maybe_supervisor&.effective_at <= effective_date.end_of_day
-        supervisor_id = maybe_supervisor&.id
-      elsif maybe_supervisor
-        raise "Supervisor is from the future!!!"
+      if(attributes[:supervisor_id])
+        maybe_supervisor = Model.find_by_proto_id(attributes[:supervisor_id])
+        unless maybe_supervisor&.effective_at && maybe_supervisor&.effective_at <= effective_date.end_of_day
+          raise "Supervisor doesn't exist or is from the future!!!"
+        end
       end
 
       model = Model.new({
         first_name: attributes[:first_name],
         last_name: attributes[:last_name],
         title: attributes[:title],
-        supervisor_id: supervisor_id
+        supervisor_id: attributes[:supervisor_id],
+        terminated: attributes[:terminated] || false,
+        image_url: attributes[:image_url]
       })
       model.meta = Meta.new_prototype(effective_date)
       model.save
