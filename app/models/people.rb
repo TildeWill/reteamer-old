@@ -27,6 +27,10 @@ module People
     models.map{ |model| Person.new_from_model(model) }
   end
 
+  def self.histogram
+    Model.select('COUNT(*) AS value, effective_at::date AS date').group('date').order(:date)
+  end
+
   def self.roots(effective_date)
     models = Model.find_for(effective_date).roots
     models.map{ |model| Person.new_from_model(model) }

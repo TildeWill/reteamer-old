@@ -12,10 +12,12 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
+  <svg width="1000" height="500"></svg>
   <div class="chart-container"></div>
 
   <script>
     var chart;
+    var histogram = <%= raw(@histogram.to_json) %>;
     var org_data = <%= raw(@flat_org_chart.to_json) %>;
     chart = new d3.OrgChart()
         .container('.chart-container')
@@ -31,7 +33,7 @@
       .childrenMargin(d => 40)
       .compactMarginBetween(d => 15)
       .compactMarginPair(d => 80)
-      .nodeContent(function(d, i, arr, state) {
+      .nodeContent(function(d, index, arr, state) {
         return `
             <div style="padding-top:30px;background-color:none;margin-left:1px;height:${
                 d.height
@@ -61,9 +63,84 @@
               </div>
             </div>
   `;
-      })        .render();
+      })
+      .render();
     chart.expandAll();
 
+
+  </script>
+
+  <style>
+
+    .selected {
+      fill: red;
+      stroke: brown;
+    }
+
+  </style>
+  <script>
+
+    var data = histogram
+    data.forEach(function(d) {
+      d.date = Date.parse(d.date);
+    });
+
+    var svg = d3.select("svg"),
+      margin = {top: 194, right: 50, bottom: 214, left: 50},
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom,
+      g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleUtc()
+      .domain(d3.extent(data, d => d.date))
+      // .ticks(d3.utcWeek)
+      .range([0, width]);
+
+    var y = d3.scaleLinear()
+      .domain(d3.extent(data, d => d.value))
+      .range([height, 0]);
+
+    var brush = d3.brushX()
+      .extent([[0, 0], [width, height]])
+      .on("brush", brushed);
+
+    var dot = g.append("g")
+      .attr("fill-opacity", 0.2)
+      .selectAll("circle")
+      .data(data)
+      .enter().append("circle")
+      .attr("transform", function(d) {
+        return "translate(" + x(d.date) + "," + y(d.value) + ")";
+      })
+      .attr("r", 3.5);
+
+    g.append("g")
+      .call(brush)
+      .call(brush.move, [3, 5].map(x))
+      .selectAll(".overlay")
+      .each(function(d) { d.type = "selection"; }) // Treat overlay interaction as move.
+      .on("mousedown touchstart", brushcentered); // Recenter before brushing.
+
+    g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    function brushcentered(event) {
+      const dx = x(Date.now()) - x(0); // Use a fixed width when recentering.
+      const [[cx]] = d3.pointers(event);
+      const [x0, x1] = [25, 50];
+      const [X0, X1] = x.range();
+      d3.select(this.parentNode)
+        .call(brush.move, x1 > X1 ? [X1 - dx, X1]
+          : x0 < X0 ? [X0, X0 + dx]
+            : [x0, x1]);
+    }
+
+    function brushed({selection}) {
+      var extent = selection.map(x.invert, x);
+      console.error("=============>", extent);
+      dot.classed("selected", function(d) { return extent[0] <= d[0] && d[0] <= extent[1]; });
+    }
 
   </script>
 </div>
