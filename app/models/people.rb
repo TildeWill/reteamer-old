@@ -13,7 +13,9 @@ module People
         last_name: attributes[:last_name],
         title: attributes[:title],
         supervisor_id: attributes[:supervisor_id],
+        employee_id: attributes[:employee_id],
         terminated: attributes[:terminated] || false,
+        contractor: attributes[:contractor] || false,
         image_url: attributes[:image_url]
       })
       model.meta = Meta.new_prototype(effective_date)

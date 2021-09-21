@@ -19,7 +19,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module JumpstartReteamer
+module Reteamer
   class Application < Rails::Application
     config.active_job.queue_adapter = :sidekiq
     config.application_name = Rails.application.class.module_parent_name
