@@ -66,8 +66,6 @@
   var y = d3.scale.linear()
     .range([height, 0]);
 
-  var color = d3.scale.category10();
-
   var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
@@ -94,24 +92,8 @@
 
   var data = d3.tsv.parse(myData);
 
-  color.domain(d3.keys(data[0]).filter(function(key) {
-    return key !== "date";
-  }));
-
   data.forEach(function(d) {
     d.date = parseDate(d.date);
-  });
-
-  var dataSets = color.domain().map(function(name) {
-    return {
-      name: name,
-      values: data.map(function(d) {
-        return {
-          date: d.date,
-          temperature: +d[name]
-        };
-      })
-    };
   });
 
   x.domain(d3.extent(data, function(d) {
@@ -119,9 +101,7 @@
   }));
 
   y.domain([
-    d3.min(data, function(d) {
-      return d.temperature;
-    }),
+    0,
     d3.max(data, function(d) {
         return d.temperature;
     })
@@ -136,20 +116,16 @@
     .attr("class", "y axis")
     .call(yAxis)
 
-  var city = svg.selectAll(".city")
-    .data(dataSets)
+  svg
+    .selectAll("rect")
+    .data(data)
     .enter()
-    .append("g")
-    .attr("class", "city");
-
-  city.append("path")
-    .attr("class", "line")
-    .attr("d", function(d) {
-      return line(d.values);
-    })
-    .style("stroke", function(d) {
-      return color(d.name);
-    });
+    .append("rect")
+    .attr("fill", "steelblue")
+    .attr("height", d => height - y(d.temperature))
+    .attr("width", 10)
+    .attr("x", (d, i) => x(d.date))
+    .attr("y", d => y(d.temperature))
 
   var chartCursor = svg.append("g")
     .attr("class", "mouse-over-effects");
@@ -174,7 +150,7 @@
   var lines = document.getElementsByClassName('line');
 
   var mousePerLine = chartCursor.selectAll('.mouse-per-line')
-    .data(dataSets)
+    .data(data)
     .enter()
     .append("g")
     .attr("class", "mouse-per-line");
