@@ -25,7 +25,7 @@
 
 <body>
 <script>
-  var myData = "date	New York\n\
+  var myData = "date	temperature\n\
 20111001	63.4\n\
 20111002	58.0\n\
 20111003	53.3\n\
@@ -119,15 +119,11 @@
   }));
 
   y.domain([
-    d3.min(dataSets, function(dataSet) {
-      return d3.min(dataSet.values, function(v) {
-        return v.temperature;
-      });
+    d3.min(data, function(d) {
+      return d.temperature;
     }),
-    d3.max(dataSets, function(dataSet) {
-      return d3.max(dataSet.values, function(v) {
-        return v.temperature;
-      });
+    d3.max(data, function(d) {
+        return d.temperature;
     })
   ]);
 
