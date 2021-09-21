@@ -31,7 +31,7 @@
     <h1>Org Chart</h1>
   </div>
   <div>
-    <form method="get"><input type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/><input type="submit" /></form>
+    <form method="get" id="date-form"><input type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
   </div>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -39,7 +39,17 @@
   <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
   <svg class="date-slider-container"></svg>
   <div class="chart-container"></div>
+  <script>
+    const dateField = document.querySelector('#effective_date');
 
+    dateField.addEventListener('change', (event) => {
+      var newDate = event.target.value;
+      // fetch new data based on date
+
+      // rerender if needed
+      document.querySelector('#date-form').submit();
+    });
+  </script>
   <script>
     var chart;
     var histogram = <%= raw(@histogram.to_json) %>;
@@ -173,8 +183,9 @@
       .style("stroke-width", "1px")
       .style("opacity", "1")
       .attr("d", function() {
-        var d = "M" + 200 + "," + height;
-        d += " " + 200 + "," + 0;
+        let currentDate = Date.parse(document.querySelector('#effective_date').value);
+        var d = "M" + x(currentDate) + "," + height;
+        d += " " + x(currentDate) + "," + 0;
         return d;
       });
 
@@ -221,8 +232,7 @@
             d += " " + mouse[0] + "," + 0;
             return d;
           });
-        console.error("=============> MOUSE CLICKED ON",xDate );
-        d3.select("#effective_date").attr("value", xDate.toISOString().split('T')[0]);
+        d3.select("#effective_date").attr("value", xDate.toISOString().split('T')[0]).dispatch('change');
       })
       .on('mousemove', function(event) { // mouse moving over canvas
         var mouse = d3.pointer(event);
@@ -235,8 +245,8 @@
 
         d3.selectAll(".mouse-per-line")
           .attr("transform", function(d, i) {
-            d3.select(this).select('text.cursor-changes')
-              .text(y.invert(11).toFixed(0) + " changes")
+            // d3.select(this).select('text.cursor-changes')
+            //   .text(y.invert(11).toFixed(0) + " changes")
             d3.select(this).select('text.cursor-date')
               .text(x.invert(mouse[0]).toISOString().split('T')[0])
 
