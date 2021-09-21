@@ -205,7 +205,7 @@
         .attr("transform", function(d, i) {
           var xDate = x.invert(mouse[0]),
             bisect = d3.bisector(function(d) { return d.date; }).right;
-          idx = bisect(d.values, xDate);
+          idx = bisect(d, xDate);
 
           var beginning = 0,
             end = lines[i].getTotalLength(),
