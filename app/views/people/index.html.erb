@@ -57,10 +57,11 @@
                     d.data.title
                   } </div>
                 </div>
+                ${d.data._directSubordinates > 0 ? `
                 <div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
                   <div > Manages:  ${d.data._directSubordinates} 👤</div>
                   <div > Oversees: ${d.data._totalSubordinates} 👤</div>
-                </div>
+                </div>` : ""}
               </div>
             </div>
   `;
