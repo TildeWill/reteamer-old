@@ -1,32 +1,4 @@
-
-
-<style>
-
-  .selected {
-    fill: red;
-    stroke: brown;
-  }
-
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-  }
-
-  .line {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 1.5px;
-  }
-
-  .cursor-changes, .cursor-date {
-    font: 10px sans-serif;
-  }
-
-</style>
-
-<div class="row">
+<div class="row org-chart">
   <div class="col-sm-6">
     <h1>Org Chart</h1>
   </div>
@@ -38,23 +10,17 @@
   <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
   <svg class="date-slider-container"></svg>
-  <div class="chart-container"></div>
+  <div class="chart-container" style="padding-left:0; padding-right:0"></div>
   <script>
     const dateField = document.querySelector('#effective_date');
 
     dateField.addEventListener('change', (event) => {
-      var newDate = event.target.value;
-      // fetch new data based on date
-
-      // rerender if needed
       document.querySelector('#date-form').submit();
     });
   </script>
   <script>
-    var chart;
-    var histogram = <%= raw(@histogram.to_json) %>;
     var org_data = <%= raw(@flat_org_chart.to_json) %>;
-    chart = new d3.OrgChart()
+    var chart = new d3.OrgChart()
         .container('.chart-container')
         .data(org_data)
         // .connections(
@@ -105,8 +71,8 @@
 
   </script>
   <script>
-
-    var data = histogram
+    var histogram = <%= raw(@histogram.to_json) %>;
+    var data = histogram;
 
     data.forEach(function(d) {
       d.date = Date.parse(d.date);
@@ -118,28 +84,32 @@
         bottom: 30,
         left: 50
       }
-    var width = 900 - margin.left - margin.right;
-    var height = 100 - margin.top - margin.bottom;
+    var width = document.querySelector('.date-slider-container').clientWidth - margin.left - margin.right;
+    var height = 80 - margin.top - margin.bottom;
 
     var x = d3.scaleUtc()
       .range([0, width]);
 
-    var y = d3.scaleLinear()
+    var y = d3.scaleSqrt()
+      .exponent(0.1)
       .range([height, 0]);
 
     var xAxis = d3.axisBottom(x)
 
-    var yAxis = d3.axisLeft(y).ticks(3)
-
     var svg = d3.select(".date-slider-container")
-      .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    x.domain(d3.extent(data, function(d) {
+    let xExtent = d3.extent(data, function(d) {
       return d.date;
-    }));
+    });
+    x.domain(
+      [
+        new Date(xExtent[0]).setDate(new Date(xExtent[0]).getDate()-5),
+        new Date(xExtent[1]).setDate(new Date(xExtent[1]).getDate()+30)
+      ]
+    );
 
     y.domain([
       0,
@@ -152,10 +122,6 @@
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
-
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
 
     svg
       .selectAll("rect")

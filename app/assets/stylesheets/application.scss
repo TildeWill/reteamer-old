@@ -19,3 +19,27 @@
 body > .alert {
   margin-bottom: 0;
 }
+
+.org-chart {
+  .selected {
+    fill: red;
+    stroke: brown;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+  .cursor-changes, .cursor-date {
+    font: 10px sans-serif;
+  }
+}
