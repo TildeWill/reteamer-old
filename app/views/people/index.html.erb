@@ -12,7 +12,7 @@
   <svg class="date-slider-container"></svg>
   <div class="chart-container" style="padding-left:0; padding-right:0"></div>
   <script>
-    const dateField = document.querySelector('#effective_date');
+    var dateField = document.querySelector('#effective_date');
 
     dateField.addEventListener('change', (event) => {
       document.querySelector('#date-form').submit();
@@ -102,7 +102,7 @@
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let xExtent = d3.extent(data, function(d) {
+    var xExtent = d3.extent(data, function(d) {
       return d.date;
     });
     x.domain(
