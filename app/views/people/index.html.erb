@@ -5,12 +5,21 @@
   <div>
     <form method="get" id="date-form"><input type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
   </div>
-
+  <div style="text-align: left" width="20%">
+    <button onclick="chart.fit();chart.exportSvg()" class="btn btn-action-button waves-effect waves-light"><i
+      class="fas fa-file-download"></i> Export chart as .svg
+    </button>
+    <br/>
+    <button onclick="chart.fit()" class="btn btn-action-button waves-effect waves-light"><i class="fas fa-sync"></i>
+      Fit chart to screen
+    </button>
+  </div>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
   <svg class="date-slider-container"></svg>
   <div class="chart-container" style="padding-left:0; padding-right:0"></div>
+
   <script>
     var dateField = document.querySelector('#effective_date');
 

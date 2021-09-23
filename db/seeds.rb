@@ -44,7 +44,7 @@ devon.update(5.years.from_now.to_date, terminated: true)
 # end of season 4
 
 # season 5
-hank    = People.create(5.years.from_now.to_date, employee_id: "KBL-001", first_name: "Hank", last_name: "Hooper", title: "CEO kabletown", image_url: "https://static.wikia.nocookie.net/30rock/images/6/67/Tumblr_mpzxbgnTaM1qd0hs5o1_500.jpg/revision/latest/top-crop/width/360/height/450?cb=20151030185818")
+hank    = People.create(5.years.from_now.to_date, employee_id: "KBL-001", first_name: "Hank", last_name: "Hooper", title: "CEO Kabletown", image_url: "https://static.wikia.nocookie.net/30rock/images/6/67/Tumblr_mpzxbgnTaM1qd0hs5o1_500.jpg/revision/latest/top-crop/width/360/height/450?cb=20151030185818")
 jack.update(5.years.from_now.to_date, supervisor_id: hank.id)
 angie = People.create(5.years.from_now.to_date, first_name: "Angie", last_name: "Jordan", title: "Actor/Producer", supervisor_id: liz.id, contractor: true)
 # end of season 5
