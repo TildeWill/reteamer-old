@@ -2,12 +2,23 @@ import { Controller } from "@hotwired/stimulus"
 import { OrgChart } from 'd3-org-chart';
 
 export default class extends Controller {
+
+  exportSvg() {
+    this.chart.fit();
+    this.chart.exportSvg()
+  }
+
+  fit() {
+    this.chart.fit();
+  }
+
+
   connect() {
     const container = document.createElement("div");
     container.className = 'chart-container'
     this.element.appendChild(container);
 
-    let chart = new OrgChart()
+    this.chart = new OrgChart()
       .container('.chart-container')
       .data(JSON.parse(this.data.get("orgData")))
       // .connections(
@@ -54,7 +65,7 @@ export default class extends Controller {
   `;
       })
       .render();
-    chart.expandAll();
+    this.chart.expandAll();
 
   }
 }
