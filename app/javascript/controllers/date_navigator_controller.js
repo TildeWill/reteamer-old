@@ -2,12 +2,16 @@ import { Controller } from "@hotwired/stimulus"
 import * as d3 from "d3"
 
 export default class extends Controller {
-  connect() {
-    var data = JSON.parse(this.data.get("histogramData"));
+  get histogram() {
+    const data = JSON.parse(this.data.get("histogramData"))
     data.forEach(function(d) {
       d.date = Date.parse(d.date);
     });
+    return data;
+  };
 
+  connect() {
+    const data = this.histogram;
     var margin = {
       top: 20,
       right: 80,
