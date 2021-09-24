@@ -9,14 +9,14 @@ module People
       end
 
       model = Model.new({
+        employee_id: attributes[:employee_id],
         first_name: attributes[:first_name],
         last_name: attributes[:last_name],
         title: attributes[:title],
-        supervisor_id: attributes[:supervisor_id],
-        employee_id: attributes[:employee_id],
+        supervisor_proto_id: attributes[:supervisor_id],
         terminated: attributes[:terminated] || false,
-        contractor: attributes[:contractor] || false,
-        image_url: attributes[:image_url]
+        image_url: attributes[:image_url],
+        contractor: attributes[:contractor] || false
       })
       model.meta = Meta.new_prototype(effective_date)
       model.save
@@ -31,10 +31,5 @@ module People
 
   def self.histogram
     Model.select('COUNT(*) AS value, effective_at::date AS date').group('date').order(:date)
-  end
-
-  def self.roots(effective_date)
-    models = Model.find_for(effective_date).roots
-    models.map{ |model| Person.new_from_model(model) }
   end
 end

@@ -2,10 +2,14 @@ module People
   # --- Entity for the outside world
   class Person
     include ActiveModel::Model
-    delegate :first_name, :last_name, :title, :email, :supervisor_id, :terminated?, :image_url, :contractor, :contractor?, :employee_id, to: :model
+    delegate :first_name, :last_name, :title, :email, :terminated?, :image_url, :contractor, :contractor?, :employee_id, to: :model
 
     def id
       model&.proto_id
+    end
+
+    def supervisor_id
+      model&.supervisor_proto_id
     end
 
     def self.new_from_model(model)
@@ -15,7 +19,7 @@ module People
     end
 
     def subordinates(effective_date)
-      Model.where(supervisor_id: id).find_for(effective_date).map do |report|
+      Model.where(supervisor_proto_id: id).find_for(effective_date).map do |report|
         Person.new_from_model(report)
       end
     end
@@ -33,7 +37,7 @@ module People
         first_name: attributes.fetch(:first_name, model.first_name),
         last_name: attributes.fetch(:last_name, model.last_name),
         title: attributes.fetch(:title, model.title),
-        supervisor_id: attributes.fetch(:supervisor_id, model.supervisor_id),
+        supervisor_proto_id: attributes.fetch(:supervisor_id, model.supervisor_proto_id),
         terminated: attributes.fetch(:terminated, model.terminated),
         image_url: attributes.fetch(:image_url, model.image_url),
         contractor: attributes.fetch(:contractor, model.contractor)

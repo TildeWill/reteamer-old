@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_043318) do
+ActiveRecord::Schema.define(version: 2021_09_24_203910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2021_09_13_043318) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "connections", force: :cascade do |t|
+    t.string "proto_id", null: false
+    t.string "person_proto_id", null: false
+    t.string "other_supervisor_proto_id", null: false
+    t.string "label"
+    t.datetime "effective_at", null: false
+    t.boolean "connection_active", default: true, null: false
+    t.datetime "created_at"
+  end
+
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -76,13 +86,13 @@ ActiveRecord::Schema.define(version: 2021_09_13_043318) do
   end
 
   create_table "people", force: :cascade do |t|
-    t.string "proto_id"
-    t.datetime "effective_at"
+    t.string "proto_id", null: false
+    t.datetime "effective_at", null: false
     t.string "first_name"
     t.string "last_name"
     t.string "title"
     t.string "employee_id"
-    t.string "supervisor_id"
+    t.string "supervisor_proto_id"
     t.string "email"
     t.text "image_url"
     t.boolean "terminated", default: false, null: false
