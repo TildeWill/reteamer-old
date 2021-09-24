@@ -3,7 +3,7 @@
     <h1>Org Chart</h1>
   </div>
   <div>
-    <form method="get" id="date-form"><input type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
+    <form method="get" id="date-form"><input data-controller="date-input" type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
   </div>
   <div style="text-align: left" width="20%">
     <button onclick="chart.fit();chart.exportSvg()" class="btn btn-action-button waves-effect waves-light"><i
@@ -16,13 +16,5 @@
   </div>
   <div data-controller="date-navigator" data-date-navigator-histogram-data="<%= @histogram.to_json %>"></div>
   <div data-controller="org-chart" data-org-chart-org-data="<%= @flat_org_chart.to_json %>" style="padding-left:0; padding-right:0"></div>
-
-  <script>
-    var dateField = document.querySelector('#effective_date');
-
-    dateField.addEventListener('change', (event) => {
-      document.querySelector('#date-form').submit();
-    });
-  </script>
 </div>
 

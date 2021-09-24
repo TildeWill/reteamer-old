@@ -4,6 +4,8 @@
 import { application } from "./application"
 
 import DateNavigatorController from "./date_navigator_controller"
+import DateInputController from "./date_input_controller"
 import OrgChartController from "./org_chart_controller"
 application.register("org-chart", OrgChartController)
 application.register("date-navigator", DateNavigatorController)
+application.register("date-input", DateInputController)
