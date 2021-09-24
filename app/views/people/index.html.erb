@@ -2,8 +2,8 @@
   <div class="col-sm-6">
     <h1>Org Chart</h1>
   </div>
-  <div>
-    <form method="get" id="date-form"><input data-controller="date-input" type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
+  <div data-controller="date-input">
+    <form method="get" id="date-form" data-date-input-target="form"><input data-action="change->date-input#handleChange" type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
   </div>
   <div style="text-align: left" width="20%">
     <button onclick="chart.fit();chart.exportSvg()" class="btn btn-action-button waves-effect waves-light"><i

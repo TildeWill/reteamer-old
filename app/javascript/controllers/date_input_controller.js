@@ -1,11 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  connect() {
-    var dateField = this.element;
+  static targets = [ "form" ]
 
-    dateField.addEventListener('change', (event) => {
-      document.querySelector('#date-form').submit();
-    });
+  handleChange() {
+    this.formTarget.submit();
   }
 }
