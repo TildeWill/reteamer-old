@@ -11,6 +11,8 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.2",
     "bootstrap": "^5.1.1",
+    "d3": "^7.0.3",
+    "d3-org-chart": "^2.5.0",
     "expose-loader": "^3.0.0",
     "local-time": "^2.1.0",
     "turbolinks": "^5.2.0",
