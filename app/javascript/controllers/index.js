@@ -3,7 +3,7 @@
 
 import { application } from "./application"
 
-import DateSliderController from "./date_slider_controller"
+import DateNavigatorController from "./date_navigator_controller"
 import OrgChartController from "./org_chart_controller"
 application.register("org-chart", OrgChartController)
-application.register("date-slider", DateSliderController)
+application.register("date-navigator", DateNavigatorController)

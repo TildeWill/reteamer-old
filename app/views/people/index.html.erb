@@ -14,7 +14,7 @@
       Fit chart to screen
     </button>
   </div>
-  <svg class="date-slider-container" data-controller="date-slider" data-date-slider-histogram-data="<%= @histogram.to_json %>"></svg>
+  <div data-controller="date-navigator" data-date-navigator-histogram-data="<%= @histogram.to_json %>"></div>
   <div class="chart-container" data-controller="org-chart" data-org-chart-org-data="<%= @flat_org_chart.to_json %>" style="padding-left:0; padding-right:0"></div>
 
   <script>

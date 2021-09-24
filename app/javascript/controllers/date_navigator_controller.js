@@ -14,21 +14,24 @@ export default class extends Controller {
       bottom: 30,
       left: 50
     }
-    var width = document.querySelector('.date-slider-container').clientWidth - margin.left - margin.right;
     var height = 80 - margin.top - margin.bottom;
-
-    var x = d3.scaleUtc()
-      .range([0, width]);
 
     var y = d3.scaleSqrt()
       .exponent(0.1)
       .range([height, 0]);
 
+
+    var svg = d3.create("svg")
+      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", "100%");
+    this.element.appendChild(svg.node());
+
+    var width = svg.node().clientWidth - margin.left - margin.right;
+    var x = d3.scaleUtc()
+      .range([0, width]);
     var xAxis = d3.axisBottom(x)
 
-    var svg = d3.select(".date-slider-container")
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+    svg.append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var xExtent = d3.extent(data, function(d) {
@@ -149,6 +152,5 @@ export default class extends Controller {
             return "translate(" + mouse[0] + ",0)";
           });
       });
-
   }
 }
