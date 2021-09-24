@@ -3,5 +3,7 @@
 
 import { application } from "./application"
 
+import DateSliderController from "./date_slider_controller"
 import OrgChartController from "./org_chart_controller"
 application.register("org-chart", OrgChartController)
+application.register("date-slider", DateSliderController)
