@@ -18,7 +18,7 @@ module People
         image_url: attributes[:image_url],
         contractor: attributes[:contractor] || false
       })
-      model.meta = Meta.new_prototype(effective_date)
+      model.meta = Meta.new_prototype(effective_date, Model)
       model.save
       Person.new_from_model(model)
     end
@@ -31,5 +31,9 @@ module People
 
   def self.histogram
     Model.select('COUNT(*) AS value, effective_at::date AS date').group('date').order(:date)
+  end
+
+  def self.delete_all
+    Model.delete_all
   end
 end

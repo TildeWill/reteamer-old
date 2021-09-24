@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_203910) do
     t.string "other_supervisor_proto_id", null: false
     t.string "label"
     t.datetime "effective_at", null: false
-    t.boolean "connection_active", default: true, null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at"
   end
 

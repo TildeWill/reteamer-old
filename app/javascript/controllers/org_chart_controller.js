@@ -21,11 +21,7 @@ export default class extends Controller {
     this.chart = new OrgChart()
       .container('.chart-container')
       .data(JSON.parse(this.data.get("orgData")))
-      // .connections(
-      //   [
-      //     { id: 1, from: "008680b1-2c41-429e-a37c-fd4c1263ab11", to: "d07b0568-989a-4453-b8df-45476b7055c4", label: "Mushroom Hunting Team" },
-      //   ],
-      // )
+      .connections(JSON.parse(this.data.get("connections")))
       .nodeWidth(d => 250)
       .initialZoom(0.7)
       .nodeHeight(d => 200)

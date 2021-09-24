@@ -1,3 +1,11 @@
+if Rails.env.production?
+  raise "Can't run seeds on production DB because it'll destroy data"
+end
+
+User.delete_all
+People.delete_all
+Connections.delete_all
+
 User.create(first_name: "Will", last_name: "Read", email: "will.read@gmail.com", admin: true, password: 'password', password_confirmation: 'password')
 
 #
@@ -15,6 +23,9 @@ leo     = People.create(7.weeks.from_now.to_date, employee_id: "HTH-555O0", firs
 tracy   = People.create(Date.current, employee_id: "NBC-923H5", first_name: "Tracy", last_name: "Jordan", title: "Actor", supervisor_id: liz.id)
 dotcom  = People.create(Date.current, first_name: "Walter \"Dot Com\"", last_name: "Slattery", title: "Entrepreneur", supervisor_id: tracy.id, contractor: true)
 grizz   = People.create(Date.current, first_name: "Warren \"Grizz\"", last_name: "Griswald", title: "Talent Manager", supervisor_id: tracy.id, contractor: true)
+
+# Add a dotted line for Kenneth who is also part of Tracy's entourage
+errand_boy_connection = Connections.create(Date.current, person_id: kenneth.id, other_supervisor_id: tracy.id, label: "Errand Boy")
 
 jenna   = People.create(Date.current, employee_id: "NBC-503Y2", first_name: "Jenna", last_name: "Maroney", title: "Actor", supervisor_id: liz.id)
 josh    = People.create(Date.current, employee_id: "NBC-684N0", first_name: "Josh", last_name: "Girard", title: "Actor/Writer", supervisor_id: liz.id)
@@ -50,3 +61,5 @@ angie = People.create(5.years.from_now.to_date, first_name: "Angie", last_name: 
 # end of season 5
 
 josh.update(6.years.from_now.to_date, terminated: false) # Josh comes back for the season finale
+
+

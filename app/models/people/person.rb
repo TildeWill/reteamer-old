@@ -45,9 +45,10 @@ module People
       new_model = Model.new(new_attributes)
 
       ApplicationRecord.transaction do
-        new_model.meta = Meta.update_prototype(model.proto_id, effective_date)
+        new_model.meta = Meta.update_prototype(model.proto_id, effective_date, Model)
         new_model.save
       end
+
       self.model = new_model
       return self
     end

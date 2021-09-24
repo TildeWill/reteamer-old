@@ -6,6 +6,7 @@ class PeopleController < ApplicationController
     @current_date = Date.parse(params.fetch(:effective_date, Date.current.iso8601))
     @flat_org_chart = People.find_for(@current_date) || []
     @histogram = People.histogram
+    @connections = Connections.find_for(@current_date) || []
   end
 
   # # GET /person_snapshots/1 or /person_snapshots/1.json
