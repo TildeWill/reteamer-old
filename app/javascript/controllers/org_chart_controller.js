@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { OrgChart } from 'd3-org-chart';
+import * as d3 from "d3"
 
 export default class extends Controller {
 
@@ -22,6 +23,18 @@ export default class extends Controller {
       .container('.chart-container')
       .data(JSON.parse(this.data.get("orgData")))
       .connections(JSON.parse(this.data.get("connections")))
+      .connectionsUpdate(function (d, i, arr) {
+        console.error("=============>", d);
+        d3.select(this)
+          .attr('stroke', (d) => '#CCCCCC')
+          .attr('stroke-linecap', 'round')
+          .attr('stroke-width', (d) => '2')
+          .attr('pointer-events', 'none')
+
+           // .attr("marker-start", d => `url(#${d.from + "_" + d.to})`)
+          //  .attr("marker-end", d => `url(#arrow-${d.from + "_" + d.to})`)
+          .attr('stroke-dasharray', '20, 20');
+      })
       .nodeWidth(d => 250)
       .initialZoom(0.7)
       .nodeHeight(d => 200)
