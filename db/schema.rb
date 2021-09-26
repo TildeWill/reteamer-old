@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_203910) do
     t.string "supervisor_proto_id"
     t.string "email"
     t.text "image_url"
-    t.boolean "terminated", default: false, null: false
+    t.boolean "active", default: true, null: false
     t.boolean "contractor", default: false, null: false
     t.datetime "created_at"
   end

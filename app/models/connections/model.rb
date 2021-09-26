@@ -11,7 +11,7 @@ module Connections
         .order(effective_at: :desc)
         .group_by(&:proto_id)
         .map{|_, models| models.first}
-        .reject{|model| !model.active?}
+        .select{ |model| model.active? }
     end
   end
 

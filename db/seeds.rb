@@ -44,14 +44,14 @@ lenny   = People.create(2.years.from_now.to_date, first_name: "Lenny", last_name
 # end of season 2
 
 # season 3
-josh.update(4.years.from_now.to_date, terminated: true) # Josh leaves after season 3
+josh.update(4.years.from_now.to_date, active: false) # Josh leaves after season 3
 # end of season 3
 
 # season 4
 danny   = People.create(4.years.from_now.to_date, employee_id: "NBC-488P8", first_name: "Danny", last_name: "Baker", title: "Actor", supervisor_id: liz.id)
-don.update(5.years.from_now.to_date, terminated: true) # Geiss dies
+don.update(5.years.from_now.to_date, active: false) # Geiss dies
 jack.update(5.years.from_now.to_date, supervisor_id: nil)
-devon.update(5.years.from_now.to_date, terminated: true)
+devon.update(5.years.from_now.to_date, active: false)
 # end of season 4
 
 # season 5
@@ -60,6 +60,6 @@ jack.update(5.years.from_now.to_date, supervisor_id: hank.id)
 angie = People.create(5.years.from_now.to_date, first_name: "Angie", last_name: "Jordan", title: "Actor/Producer", supervisor_id: liz.id, contractor: true)
 # end of season 5
 
-josh.update(6.years.from_now.to_date, terminated: false) # Josh comes back for the season finale
+josh.update(6.years.from_now.to_date, active: true) # Josh comes back for the season finale
 
 

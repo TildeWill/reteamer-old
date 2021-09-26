@@ -1,6 +1,6 @@
 class CreatePeople < ActiveRecord::Migration[6.1]
   def change
-    create_table :org_charts do |t|
+    create_table :people do |t|
       t.string :proto_id, null: false
       t.datetime :effective_at, null: false
       t.string :first_name
@@ -10,7 +10,7 @@ class CreatePeople < ActiveRecord::Migration[6.1]
       t.string :supervisor_proto_id
       t.string :email
       t.text :image_url
-      t.boolean :terminated, default: false, null: false
+      t.boolean :active, default: true, null: false
       t.boolean :contractor, default: false, null: false
 
       t.datetime :created_at

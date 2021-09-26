@@ -2,7 +2,7 @@ module People
   # --- Entity for the outside world
   class Person
     include ActiveModel::Model
-    delegate :first_name, :last_name, :title, :email, :terminated?, :image_url, :contractor, :contractor?, :employee_id, to: :model
+    delegate :first_name, :last_name, :title, :email, :active?, :image_url, :contractor, :contractor?, :employee_id, to: :model
 
     def id
       model&.proto_id
@@ -32,7 +32,7 @@ module People
         last_name: attributes.fetch(:last_name, model.last_name),
         title: attributes.fetch(:title, model.title),
         supervisor_proto_id: attributes.fetch(:supervisor_id, model.supervisor_proto_id),
-        terminated: attributes.fetch(:terminated, model.terminated),
+        active: attributes.fetch(:active, model.active),
         image_url: attributes.fetch(:image_url, model.image_url),
         contractor: attributes.fetch(:contractor, model.contractor)
       }

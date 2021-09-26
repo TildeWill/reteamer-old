@@ -17,7 +17,7 @@ module People
         .order(effective_at: :desc)
         .group_by(&:proto_id)
         .map{|_, models| models.first}
-        .reject(&:terminated?)
+        .select{ |model| model.active? }
     end
   end
   private_constant :Model

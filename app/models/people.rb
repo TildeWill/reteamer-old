@@ -14,7 +14,7 @@ module People
         last_name: attributes[:last_name],
         title: attributes[:title],
         supervisor_proto_id: attributes[:supervisor_id],
-        terminated: attributes[:terminated] || false,
+        active: attributes[:active] || true,
         image_url: attributes[:image_url],
         contractor: attributes[:contractor] || false
       })
