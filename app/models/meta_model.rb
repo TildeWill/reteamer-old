@@ -7,7 +7,7 @@ module MetaModel
     def find_for(effective_date)
       self
         .where(
-          effective_at: 30.years.ago..effective_date.end_of_day,
+          effective_at: ..effective_date.end_of_day,
         )
         .order(effective_at: :desc)
         .group_by(&:proto_id)
