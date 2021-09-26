@@ -4,7 +4,7 @@ end
 
 User.delete_all
 People::Person.delete_all
-Connections.delete_all
+Connections::Connection.delete_all
 
 User.create(first_name: "Will", last_name: "Read", email: "will.read@gmail.com", admin: true, password: 'password', password_confirmation: 'password')
 
@@ -25,7 +25,7 @@ dotcom  = People::Person.create(Date.current, first_name: "Walter \"Dot Com\"", 
 grizz   = People::Person.create(Date.current, first_name: "Warren \"Grizz\"", last_name: "Griswald", title: "Talent Manager", supervisor_id: tracy.id, contractor: true)
 
 # Add a dotted line for Kenneth who is also part of Tracy's entourage
-errand_boy_connection = Connections.create(Date.current, person_id: kenneth.id, other_supervisor_id: tracy.id, label: "Errand Boy")
+errand_boy_connection = Connections::Connection.create(Date.current, person_id: kenneth.id, other_supervisor_id: tracy.id, label: "Errand Boy")
 
 jenna   = People::Person.create(Date.current, employee_id: "NBC-503Y2", first_name: "Jenna", last_name: "Maroney", title: "Actor", supervisor_id: liz.id)
 josh    = People::Person.create(Date.current, employee_id: "NBC-684N0", first_name: "Josh", last_name: "Girard", title: "Actor/Writer", supervisor_id: liz.id)

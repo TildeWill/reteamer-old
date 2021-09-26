@@ -17,6 +17,18 @@ module Connections
       connection
     end
 
+    def self.create(effective_date, attributes)
+      model = Model.new({
+        person_proto_id: attributes[:person_id],
+        other_supervisor_proto_id: attributes[:other_supervisor_id],
+        active: attributes[:active] || true,
+        label: attributes[:label]
+      })
+      model.meta = Meta.new_prototype(effective_date, Model)
+      model.save
+      Connection.new_from_model(model)
+    end
+
     def update(effective_date, attributes)
       new_attributes = {
         person_proto_id: attributes.fetch(:person_id, person_id),
@@ -32,6 +44,15 @@ module Connections
 
       self.model = new_model
       return self
+    end
+
+    def self.find_for(effective_date)
+      models = Model.find_for(effective_date)
+      models.map{ |model| Connection.new_from_model(model) }
+    end
+
+    def self.delete_all
+      Model.delete_all
     end
 
     def as_json(options = nil)
