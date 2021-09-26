@@ -1,6 +1,6 @@
 class CreatePeople < ActiveRecord::Migration[6.1]
   def change
-    create_table :people do |t|
+    create_table :org_charts do |t|
       t.string :proto_id, null: false
       t.datetime :effective_at, null: false
       t.string :first_name

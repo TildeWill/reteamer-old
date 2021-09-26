@@ -4,7 +4,6 @@ module People
     self.table_name = 'people'
 
     belongs_to :supervisor, class_name: "People::Model", optional: true, foreign_key: :supervisor_proto_id
-    has_many :subordinates, class_name: "People::Model", foreign_key: :supervisor_id
 
     scope :roots, -> { where(supervisor: nil) }
 

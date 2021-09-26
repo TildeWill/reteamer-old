@@ -1,0 +1,21 @@
+<div class="row org-chart">
+  <div class="col-sm-6">
+    <h1>Teams</h1>
+  </div>
+  <div data-controller="date-input">
+    <form method="get" id="date-form" data-date-input-target="form"><input data-action="change->date-input#handleChange" type="date" id="effective_date" name="effective_date" value="<%= @current_date %>"/></form>
+  </div>
+  <div data-controller="date-navigator" data-date-navigator-histogram-data="<%= @histogram.to_json %>"></div>
+  <div data-controller="org-chart" data-org-chart-org-data="<%= @flat_org_chart.to_json %>" data-org-chart-connections="<%= @connections.to_json %>" style="padding-left:0; padding-right:0">
+    <div style="text-align: left" width="20%">
+      <button data-action="click->org-chart#exportSvg" class="btn btn-action-button waves-effect waves-light"><i
+        class="fas fa-file-download"></i> Export chart as .svg
+      </button>
+      <br/>
+      <button data-action="click->org-chart#fit" class="btn btn-action-button waves-effect waves-light"><i class="fas fa-sync"></i>
+        Fit chart to screen
+      </button>
+    </div>
+  </div>
+</div>
+

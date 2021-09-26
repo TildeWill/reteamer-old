@@ -18,12 +18,6 @@ module People
       person
     end
 
-    def subordinates(effective_date)
-      Model.where(supervisor_proto_id: id).find_for(effective_date).map do |report|
-        Person.new_from_model(report)
-      end
-    end
-
     def update(effective_date, attributes)
       # maybe_supervisor = attributes[:supervisor]&.send(:model)
       # if maybe_supervisor&.effective_at && maybe_supervisor&.effective_at <= effective_date.end_of_day

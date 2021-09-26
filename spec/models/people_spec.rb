@@ -36,12 +36,4 @@ RSpec.describe People do
     expect(paulz.first_name).to eq("Paulz")
     expect(paulz.last_name).to eq("Singer")
   end
-
-  it "returns the manager as a person" do
-    supervisor = People.create(Date.current, first_name: "Michael")
-    subordinate = People.create(Date.current, first_name: "Jim", supervisor_id: supervisor.id)
-
-    expect(subordinate.supervisor_id).to eq(supervisor.id)
-    expect(supervisor.subordinates(Date.current).map(&:id)).to eq([subordinate.id])
-  end
 end
