@@ -24,7 +24,6 @@ export default class extends Controller {
       .data(JSON.parse(this.data.get("orgData")))
       .connections(JSON.parse(this.data.get("connections")))
       .connectionsUpdate(function (d, i, arr) {
-        console.error("=============>", d);
         d3.select(this)
           .attr('stroke', (d) => '#CCCCCC')
           .attr('stroke-linecap', 'round')
