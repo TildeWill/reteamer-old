@@ -15,7 +15,6 @@ class Meta
   attr_writer :proto_id, :effective_at
   attr_accessor :model_class
 
-  private_class_method :new
   def initialize(proto_id, effective_at)
     self.proto_id = proto_id
     self.effective_at = effective_at

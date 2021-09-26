@@ -2,6 +2,8 @@ module People
   # --- Private ActiveRecord model
   class Model < ApplicationRecord
     self.table_name = 'people'
+    include MetaModel
+
 
     belongs_to :supervisor, class_name: "People::Model", optional: true, foreign_key: :supervisor_proto_id
 
@@ -16,17 +18,6 @@ module People
         .group_by(&:proto_id)
         .map{|_, models| models.first}
         .reject(&:terminated?)
-    end
-
-    def meta
-      @meta ||= Meta.new(proto_id, effective_at)
-    end
-
-    def meta=(meta)
-      self.proto_id = meta.proto_id
-      self.effective_at = meta.effective_at
-
-      @meta = meta
     end
   end
   private_constant :Model

@@ -1,17 +1,7 @@
 module Connections
   class Model < ApplicationRecord
     self.table_name = 'connections'
-
-    def meta
-      @meta ||= Meta.new(proto_id, effective_at)
-    end
-
-    def meta=(meta)
-      self.proto_id = meta.proto_id
-      self.effective_at = meta.effective_at
-
-      @meta = meta
-    end
+    include MetaModel
 
     def self.find_for(effective_date)
       self
@@ -25,5 +15,5 @@ module Connections
     end
   end
 
-  private_constant :Model
+  # private_constant :Model
 end
