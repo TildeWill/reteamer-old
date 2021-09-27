@@ -12,6 +12,9 @@ export default class extends Controller {
     return data;
   };
 
+  handleNewOrgData(event) {
+    console.log("=============>", event.detail.orgData.histogram);
+  }
   handleChange(event) {
     this.emitNewDateEvent(new Date(event.target.value))
   }

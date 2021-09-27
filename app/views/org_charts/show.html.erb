@@ -2,7 +2,7 @@
   <div class="col-sm-6">
     <h1>Org Chart</h1>
   </div>
-  <div data-controller="date-navigator" data-date-navigator-histogram-data="<%= @histogram.to_json %>">
+  <div data-controller="date-navigator" data-action="newOrgData@window->date-navigator#handleNewOrgData" data-date-navigator-histogram-data="<%= @histogram.to_json %>">
     <input data-date-navigator-target="dateInput" data-action="change->date-navigator#handleChange" type="date" value="<%= @current_date %>"/>
   </div>
   <div data-controller="org-chart" data-action="newOrgData@window->org-chart#handleNewOrgData" style="padding-left:0; padding-right:0">
