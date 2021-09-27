@@ -13,6 +13,7 @@ export default class extends Controller {
   };
 
   handleNewOrgData(event) {
+    // console.log("=============>", event.detail.orgData.histogram);
     this.histogramData = event.detail.orgData.histogram
     this.histogramData.forEach(function(d) {
       d.date = Date.parse(d.date);
@@ -80,22 +81,13 @@ export default class extends Controller {
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
-    self.mouseLine = self.svg.append("g")
-      .attr("class", "mouse-per-line");
-
-    self.mouseLine.append("text")
-      .attr("transform", "translate(10,3)")
-      .attr("class", "cursor-changes")
-    self.mouseLine.append("text")
-      .attr("transform", "translate(10,13)")
-      .attr("class", "cursor-date")
 
     this.renderChart();
   }
 
   renderChart() {
     const self = this;
-    const data = self.histogramData;
+    const data = self.histogram;
 
     this.xExtent = d3.extent(data, function(d) {
       return d.date;
@@ -130,6 +122,16 @@ export default class extends Controller {
       .attr("width", 10)
       .attr("x", (d, i) => self.x(d.date))
       .attr("y", d => self.y(d.value))
+
+    self.mouseLine = self.svg.append("g")
+      .attr("class", "mouse-per-line");
+
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,3)")
+      .attr("class", "cursor-changes")
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,13)")
+      .attr("class", "cursor-date")
 
     self.chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', self.width) // can't catch mouse events on a g element
