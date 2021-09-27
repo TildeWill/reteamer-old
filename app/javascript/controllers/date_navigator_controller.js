@@ -28,36 +28,58 @@ export default class extends Controller {
   }
 
   connect() {
-    const data = this.histogram;
-    var margin = {
+    this.svg = d3.create("svg")
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .attr("width", "100%");
+    this.svg.append("g") //TODO: is this needed?
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+
+    this.element.appendChild(this.svg.node());
+    this.renderChart(this.histogram);
+  }
+
+  get margin() {
+    return {
       top: 20,
       right: 80,
       bottom: 30,
       left: 50
     }
-    var height = 80 - margin.top - margin.bottom;
+  }
 
-    var y = d3.scaleSqrt()
+  get height() {
+    return 80 - this.margin.top - this.margin.bottom;
+  }
+
+  get y() {
+    return d3.scaleSqrt()
       .exponent(0.1)
-      .range([height, 0]);
+      .range([this.height, 0]);
 
+  }
 
-    var svg = d3.create("svg")
-      .attr("height", height + margin.top + margin.bottom)
-      .attr("width", "100%");
-    this.element.appendChild(svg.node());
+  get x(){
+    return d3.scaleUtc().range([0, this.width]);
+  }
 
-    var width = svg.node().clientWidth - margin.left - margin.right;
-    var x = d3.scaleUtc()
-      .range([0, width]);
+  get width() {
+    return this.svg.node().clientWidth - this.margin.left - this.margin.right;
+  }
+
+  renderChart(histogram) {
+    const height = this.height;
+    const width = this.width;
+    const y = this.y
+    const x = this.x
+    const data = histogram;
+    const self = this;
+
     var xAxis = d3.axisBottom(x)
-
-    svg.append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     var xExtent = d3.extent(data, function(d) {
       return d.date;
     });
+
     x.domain(
       [
         new Date(xExtent[0]).setDate(new Date(xExtent[0]).getDate()-5),
@@ -72,12 +94,12 @@ export default class extends Controller {
       })
     ]);
 
-    svg.append("g")
+    this.svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-    svg
+    this.svg
       .selectAll("rect")
       .data(data)
       .enter()
@@ -88,7 +110,7 @@ export default class extends Controller {
       .attr("x", (d, i) => x(d.date))
       .attr("y", d => y(d.value))
 
-    var chartCursor = svg.append("g")
+    var chartCursor = this.svg.append("g")
       .attr("class", "mouse-over-effects");
 
     chartCursor.append("path") // this is the black vertical line to follow mouse
@@ -99,7 +121,7 @@ export default class extends Controller {
 
     let currentDate = new Date(this.dateInputTarget.value);
 
-    let currentDateMarker = svg.append("path")
+    let currentDateMarker = this.svg.append("path")
       .attr("class", "date-marker")
       .style("stroke", "red")
       .style("stroke-width", "1px")
@@ -110,14 +132,11 @@ export default class extends Controller {
         return d;
       });
 
-    var lines = document.getElementsByClassName('line');
-
     var mousePerLine = chartCursor.selectAll('.mouse-per-line')
       .data(data)
       .enter()
       .append("g")
       .attr("class", "mouse-per-line");
-
 
     mousePerLine.append("text")
       .attr("transform", "translate(10,3)")
@@ -126,7 +145,6 @@ export default class extends Controller {
       .attr("transform", "translate(10,13)")
       .attr("class", "cursor-date")
 
-    const self = this;
     chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', width) // can't catch mouse events on a g element
       .attr('height', height)
@@ -169,8 +187,6 @@ export default class extends Controller {
 
         d3.selectAll(".mouse-per-line")
           .attr("transform", function(d, i) {
-            // d3.select(this).select('text.cursor-changes')
-            //   .text(y.invert(11).toFixed(0) + " changes")
             d3.select(this).select('text.cursor-date')
               .text(x.invert(mouse[0]).toISOString().split('T')[0])
 
