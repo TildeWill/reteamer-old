@@ -81,6 +81,20 @@ export default class extends Controller {
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
+    self.xAxisElement = self.svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + self.height + ")")
+
+    self.mouseLine = self.svg.append("g")
+      .attr("class", "mouse-per-line");
+
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,3)")
+      .attr("class", "cursor-changes")
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,13)")
+      .attr("class", "cursor-date")
+
 
     this.renderChart();
   }
@@ -95,7 +109,7 @@ export default class extends Controller {
 
     self.x.domain(
       [
-        new Date(self.xExtent[0]).setDate(new Date(self.xExtent[0]).getDate()-5),
+        new Date(self.xExtent[0]).setDate(new Date(self.xExtent[0]).getDate()-30),
         new Date(self.xExtent[1]).setDate(new Date(self.xExtent[1]).getDate()+30)
       ]
     );
@@ -107,10 +121,7 @@ export default class extends Controller {
       })
     ]);
 
-    this.svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + self.height + ")")
-      .call(self.xAxis);
+    self.xAxisElement.call(self.xAxis);
 
     this.svg
       .selectAll("rect")
@@ -122,16 +133,6 @@ export default class extends Controller {
       .attr("width", 10)
       .attr("x", (d, i) => self.x(d.date))
       .attr("y", d => self.y(d.value))
-
-    self.mouseLine = self.svg.append("g")
-      .attr("class", "mouse-per-line");
-
-    self.mouseLine.append("text")
-      .attr("transform", "translate(10,3)")
-      .attr("class", "cursor-changes")
-    self.mouseLine.append("text")
-      .attr("transform", "translate(10,13)")
-      .attr("class", "cursor-date")
 
     self.chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', self.width) // can't catch mouse events on a g element
