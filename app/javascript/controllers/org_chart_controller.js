@@ -13,9 +13,8 @@ export default class extends Controller {
     this.chart.fit();
   }
 
-  async handleDatePicked(event) {
-    const response = await fetch(`/api/org_chart.json?effective_date=${event.detail.newDate}`)
-    this.orgData = await response.json()
+  async handleNewOrgData(event) {
+    this.orgData = event.detail.orgData;
     this.chart
       .data(this.orgData.people)
       .connections(this.orgData.connections)

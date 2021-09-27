@@ -5,7 +5,7 @@
   <div data-controller="date-navigator" data-date-navigator-histogram-data="<%= @histogram.to_json %>">
     <input data-date-navigator-target="dateInput" data-action="change->date-navigator#handleChange" type="date" value="<%= @current_date %>"/>
   </div>
-  <div data-controller="org-chart" data-action="datePicked@window->org-chart#handleDatePicked" style="padding-left:0; padding-right:0">
+  <div data-controller="org-chart" data-action="newOrgData@window->org-chart#handleNewOrgData" style="padding-left:0; padding-right:0">
     <div style="text-align: left" width="20%">
       <button data-action="click->org-chart#exportSvg" class="btn btn-action-button waves-effect waves-light"><i
         class="fas fa-file-download"></i> Export chart as .svg
@@ -16,5 +16,6 @@
       </button>
     </div>
   </div>
+  <div data-controller="org-data" data-action="datePicked@window->org-data#handleDatePicked"></div>
 </div>
 

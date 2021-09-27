@@ -5,5 +5,7 @@ import { application } from "./application"
 
 import DateNavigatorController from "./date_navigator_controller"
 import OrgChartController from "./org_chart_controller"
+import OrgDataController from "./org_data_controller"
 application.register("org-chart", OrgChartController)
+application.register("org-data", OrgDataController)
 application.register("date-navigator", DateNavigatorController)
