@@ -31,66 +31,47 @@ export default class extends Controller {
   }
 
   connect() {
-    this.svg = d3.create("svg")
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .attr("width", "100%");
-    this.svg.append("g") //TODO: is this needed?
-      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-
-
-    this.element.appendChild(this.svg.node());
-    this.renderChart(this.histogram);
-  }
-
-  get margin() {
-    return {
+    this.margin = {
       top: 20,
       right: 80,
       bottom: 30,
       left: 50
     }
-  }
-
-  get height() {
-    return 80 - this.margin.top - this.margin.bottom;
-  }
-
-  get y() {
-    return d3.scaleSqrt()
+    this.height = 80 - this.margin.top - this.margin.bottom;
+    this.y = d3.scaleSqrt()
       .exponent(0.1)
       .range([this.height, 0]);
 
+    this.svg = d3.create("svg")
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .attr("width", "100%");
+    this.svg.append("g") //TODO: is this needed?
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+    this.element.appendChild(this.svg.node()); //must do this before we can read the width of the node
+
+    this.width = this.svg.node().clientWidth - this.margin.left - this.margin.right;
+    this.x = d3.scaleUtc().range([0, this.width]);
+    this.xAxis = d3.axisBottom(this.x)
+
+    this.renderChart();
   }
 
-  get x(){
-    return d3.scaleUtc().range([0, this.width]);
-  }
-
-  get width() {
-    return this.svg.node().clientWidth - this.margin.left - this.margin.right;
-  }
-
-  renderChart(histogram) {
-    const height = this.height;
-    const width = this.width;
-    const y = this.y
-    const x = this.x
-    const data = histogram;
+  renderChart() {
     const self = this;
+    const data = self.histogram;
 
-    var xAxis = d3.axisBottom(x)
-    var xExtent = d3.extent(data, function(d) {
+    this.xExtent = d3.extent(data, function(d) {
       return d.date;
     });
 
-    x.domain(
+    self.x.domain(
       [
-        new Date(xExtent[0]).setDate(new Date(xExtent[0]).getDate()-5),
-        new Date(xExtent[1]).setDate(new Date(xExtent[1]).getDate()+30)
+        new Date(self.xExtent[0]).setDate(new Date(self.xExtent[0]).getDate()-5),
+        new Date(self.xExtent[1]).setDate(new Date(self.xExtent[1]).getDate()+30)
       ]
     );
 
-    y.domain([
+    self.y.domain([
       0,
       d3.max(data, function(d) {
         return d.value;
@@ -99,8 +80,8 @@ export default class extends Controller {
 
     this.svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      .attr("transform", "translate(0," + self.height + ")")
+      .call(self.xAxis);
 
     this.svg
       .selectAll("rect")
@@ -108,10 +89,10 @@ export default class extends Controller {
       .enter()
       .append("rect")
       .attr("fill", "steelblue")
-      .attr("height", d => height - y(d.value))
+      .attr("height", d => self.height - self.y(d.value))
       .attr("width", 10)
-      .attr("x", (d, i) => x(d.date))
-      .attr("y", d => y(d.value))
+      .attr("x", (d, i) => self.x(d.date))
+      .attr("y", d => self.y(d.value))
 
     var chartCursor = this.svg.append("g")
       .attr("class", "mouse-over-effects");
@@ -122,16 +103,16 @@ export default class extends Controller {
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
-    let currentDate = new Date(this.dateInputTarget.value);
+    let currentDate = new Date(self.dateInputTarget.value);
 
-    let currentDateMarker = this.svg.append("path")
+    let currentDateMarker = self.svg.append("path")
       .attr("class", "date-marker")
       .style("stroke", "red")
       .style("stroke-width", "1px")
       .style("opacity", "1")
       .attr("d", function() {
-        var d = "M" + x(currentDate) + "," + height;
-        d += " " + x(currentDate) + "," + 0;
+        var d = "M" + self.x(currentDate) + "," + self.height;
+        d += " " + self.x(currentDate) + "," + 0;
         return d;
       });
 
@@ -149,8 +130,8 @@ export default class extends Controller {
       .attr("class", "cursor-date")
 
     chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
-      .attr('width', width) // can't catch mouse events on a g element
-      .attr('height', height)
+      .attr('width', self.width) // can't catch mouse events on a g element
+      .attr('height', self.height)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
       .on('mouseout', function() { // on mouse out hide line, circles and text
@@ -167,11 +148,11 @@ export default class extends Controller {
       })
       .on('click', function(event) { // on mouse in show line, circles and text
         var mouse = d3.pointer(event);
-        var xDate = x.invert(mouse[0])
+        var xDate = self.x.invert(mouse[0])
 
         d3.select(".date-marker")
           .attr("d", function() {
-            var d = "M" + mouse[0] + "," + height;
+            var d = "M" + mouse[0] + "," + self.height;
             d += " " + mouse[0] + "," + 0;
             return d;
           });
@@ -183,7 +164,7 @@ export default class extends Controller {
         var mouse = d3.pointer(event);
         d3.select(".cursor-line")
           .attr("d", function() {
-            var d = "M" + mouse[0] + "," + height;
+            var d = "M" + mouse[0] + "," + self.height;
             d += " " + mouse[0] + "," + 0;
             return d;
           });
@@ -191,7 +172,7 @@ export default class extends Controller {
         d3.selectAll(".mouse-per-line")
           .attr("transform", function(d, i) {
             d3.select(this).select('text.cursor-date')
-              .text(x.invert(mouse[0]).toISOString().split('T')[0])
+              .text(self.x.invert(mouse[0]).toISOString().split('T')[0])
 
             return "translate(" + mouse[0] + ",0)";
           });
