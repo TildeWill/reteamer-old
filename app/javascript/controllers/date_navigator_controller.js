@@ -4,16 +4,7 @@ import * as d3 from "d3"
 export default class extends Controller {
   static targets = [ "dateInput" ]
 
-  get histogram() {
-    this.histogramData = JSON.parse(this.data.get("histogramData"))
-    this.histogramData.forEach(function(d) {
-      d.date = Date.parse(d.date);
-    });
-    return this.histogramData;
-  };
-
   handleNewOrgData(event) {
-    // console.log("=============>", event.detail.orgData.histogram);
     this.histogramData = event.detail.orgData.histogram
     this.histogramData.forEach(function(d) {
       d.date = Date.parse(d.date);
@@ -37,6 +28,12 @@ export default class extends Controller {
 
   connect() {
     const self = this;
+
+    self.histogramData = JSON.parse(self.data.get("histogramData"))
+    self.histogramData.forEach(function(d) {
+      d.date = Date.parse(d.date);
+    });
+
     this.margin = {
       top: 20,
       right: 80,
@@ -150,7 +147,7 @@ export default class extends Controller {
 
   renderChart() {
     const self = this;
-    const data = self.histogram;
+    const data = self.histogramData;
 
     this.xExtent = d3.extent(data, function(d) {
       return d.date;
