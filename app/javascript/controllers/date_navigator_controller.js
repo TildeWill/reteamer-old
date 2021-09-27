@@ -13,7 +13,6 @@ export default class extends Controller {
   };
 
   handleNewOrgData(event) {
-    // console.log("=============>", event.detail.orgData.histogram);
     this.histogramData = event.detail.orgData.histogram
     this.histogramData.forEach(function(d) {
       d.date = Date.parse(d.date);
@@ -96,7 +95,7 @@ export default class extends Controller {
 
   renderChart() {
     const self = this;
-    const data = self.histogram;
+    const data = self.histogramData;
 
     this.xExtent = d3.extent(data, function(d) {
       return d.date;
