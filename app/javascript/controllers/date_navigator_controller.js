@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 import * as d3 from "d3"
 
 export default class extends Controller {
+  static targets = [ "dateInput" ]
+
   get histogram() {
     const data = JSON.parse(this.data.get("histogramData"))
     data.forEach(function(d) {
@@ -9,6 +11,21 @@ export default class extends Controller {
     });
     return data;
   };
+
+  handleChange(event) {
+    this.emitNewDateEvent(new Date(event.target.value))
+  }
+
+  emitNewDateEvent(newDate) {
+    const dateChangedEvent = new CustomEvent("datePicked",
+      {
+        detail: {
+          newDate: newDate
+        }
+      }
+    )
+    window.dispatchEvent(dateChangedEvent)
+  }
 
   connect() {
     const data = this.histogram;
@@ -80,13 +97,14 @@ export default class extends Controller {
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
-    var currentDateMarker = svg.append("path") // this is the black vertical line to follow mouse
+    let currentDate = new Date(this.dateInputTarget.value);
+
+    let currentDateMarker = svg.append("path")
       .attr("class", "date-marker")
       .style("stroke", "red")
       .style("stroke-width", "1px")
       .style("opacity", "1")
       .attr("d", function() {
-        let currentDate = Date.parse(document.querySelector('#effective_date').value);
         var d = "M" + x(currentDate) + "," + height;
         d += " " + x(currentDate) + "," + 0;
         return d;
@@ -108,6 +126,7 @@ export default class extends Controller {
       .attr("transform", "translate(10,13)")
       .attr("class", "cursor-date")
 
+    const self = this;
     chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', width) // can't catch mouse events on a g element
       .attr('height', height)
@@ -136,15 +155,8 @@ export default class extends Controller {
             return d;
           });
         let newDate = xDate.toISOString().split('T')[0];
-        // d3.select("#effective_date").attr("value", newDate).dispatch('change');
-        const dateChangedEvent = new CustomEvent("datePicked",
-          {
-            detail: {
-              newDate: newDate
-            }
-          }
-        )
-        window.dispatchEvent(dateChangedEvent)
+        self.dateInputTarget.value = newDate;
+        self.emitNewDateEvent(newDate)
       })
       .on('mousemove', function(event) { // mouse moving over canvas
         var mouse = d3.pointer(event);
