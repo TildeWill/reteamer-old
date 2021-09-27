@@ -5,15 +5,20 @@ export default class extends Controller {
   static targets = [ "dateInput" ]
 
   get histogram() {
-    const data = JSON.parse(this.data.get("histogramData"))
-    data.forEach(function(d) {
+    this.histogramData = JSON.parse(this.data.get("histogramData"))
+    this.histogramData.forEach(function(d) {
       d.date = Date.parse(d.date);
     });
-    return data;
+    return this.histogramData;
   };
 
   handleNewOrgData(event) {
-    console.log("=============>", event.detail.orgData.histogram);
+    // console.log("=============>", event.detail.orgData.histogram);
+    this.histogramData = event.detail.orgData.histogram
+    this.histogramData.forEach(function(d) {
+      d.date = Date.parse(d.date);
+    });
+    this.renderChart()
   }
   handleChange(event) {
     this.emitNewDateEvent(new Date(event.target.value))
@@ -31,6 +36,7 @@ export default class extends Controller {
   }
 
   connect() {
+    const self = this;
     this.margin = {
       top: 20,
       right: 80,
@@ -52,6 +58,38 @@ export default class extends Controller {
     this.width = this.svg.node().clientWidth - this.margin.left - this.margin.right;
     this.x = d3.scaleUtc().range([0, this.width]);
     this.xAxis = d3.axisBottom(this.x)
+
+    this.currentDate = new Date(self.dateInputTarget.value);
+
+    let currentDateMarker = self.svg.append("path")
+      .attr("class", "date-marker")
+      .style("stroke", "red")
+      .style("stroke-width", "1px")
+      .style("opacity", "1")
+      .attr("d", function() {
+        var d = "M" + self.x(self.currentDate) + "," + self.height;
+        d += " " + self.x(self.currentDate) + "," + 0;
+        return d;
+      });
+
+    this.chartCursor = this.svg.append("g")
+      .attr("class", "mouse-over-effects");
+
+    this.chartCursor.append("path") // this is the black vertical line to follow mouse
+      .attr("class", "cursor-line")
+      .style("stroke", "black")
+      .style("stroke-width", "1px")
+      .style("opacity", "0");
+
+    self.mouseLine = self.svg.append("g")
+      .attr("class", "mouse-per-line");
+
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,3)")
+      .attr("class", "cursor-changes")
+    self.mouseLine.append("text")
+      .attr("transform", "translate(10,13)")
+      .attr("class", "cursor-date")
 
     this.renderChart();
   }
@@ -94,42 +132,7 @@ export default class extends Controller {
       .attr("x", (d, i) => self.x(d.date))
       .attr("y", d => self.y(d.value))
 
-    var chartCursor = this.svg.append("g")
-      .attr("class", "mouse-over-effects");
-
-    chartCursor.append("path") // this is the black vertical line to follow mouse
-      .attr("class", "cursor-line")
-      .style("stroke", "black")
-      .style("stroke-width", "1px")
-      .style("opacity", "0");
-
-    let currentDate = new Date(self.dateInputTarget.value);
-
-    let currentDateMarker = self.svg.append("path")
-      .attr("class", "date-marker")
-      .style("stroke", "red")
-      .style("stroke-width", "1px")
-      .style("opacity", "1")
-      .attr("d", function() {
-        var d = "M" + self.x(currentDate) + "," + self.height;
-        d += " " + self.x(currentDate) + "," + 0;
-        return d;
-      });
-
-    var mousePerLine = chartCursor.selectAll('.mouse-per-line')
-      .data(data)
-      .enter()
-      .append("g")
-      .attr("class", "mouse-per-line");
-
-    mousePerLine.append("text")
-      .attr("transform", "translate(10,3)")
-      .attr("class", "cursor-changes")
-    mousePerLine.append("text")
-      .attr("transform", "translate(10,13)")
-      .attr("class", "cursor-date")
-
-    chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
+    self.chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', self.width) // can't catch mouse events on a g element
       .attr('height', self.height)
       .attr('fill', 'none')
