@@ -13,16 +13,29 @@ export default class extends Controller {
     this.chart.fit();
   }
 
+  async handleDatePicked(event) {
+    const response = await fetch(`/api/org_chart.json?effective_date=${event.detail.newDate}`)
+    this.orgData = await response.json()
+    this.chart
+      .data(this.orgData.people)
+      .connections(this.orgData.connections)
+      .render()
+      .expandAll()
+      .fit()
+  }
 
-  connect() {
+  async connect() {
+    const response = await fetch('/api/org_chart.json')
+    this.orgData = await response.json()
+
     const container = document.createElement("div");
     container.className = 'chart-container'
     this.element.appendChild(container);
 
     this.chart = new OrgChart()
       .container('.chart-container')
-      .data(JSON.parse(this.data.get("orgData")))
-      .connections(JSON.parse(this.data.get("connections")))
+      .data(this.orgData.people)
+      .connections(this.orgData.connections)
       .connectionsUpdate(function (d, i, arr) {
         d3.select(this)
           .attr('stroke', (d) => '#CCCCCC')
@@ -72,8 +85,8 @@ export default class extends Controller {
             </div>
   `;
       })
-      .render();
-    this.chart.expandAll();
-
+      .render()
+      .expandAll()
+      .fit()
   }
 }

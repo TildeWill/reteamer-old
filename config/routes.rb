@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  resources :org_charts, only: :index
+  resource :org_chart, only: :show
   resources :teams, only: :index
   draw :madmin
   get '/privacy', to: 'home#privacy'
@@ -10,6 +10,10 @@ authenticate :user, lambda { |u| u.admin? } do
   mount Sidekiq::Web => '/sidekiq'
 
   namespace :madmin do
+  end
+
+  namespace :api do
+    resource :org_chart, only: :show
   end
 end
 

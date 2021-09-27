@@ -1,18 +1,18 @@
-module Connections
-  class Connection
+module Teams
+  class Team
     include ActiveModel::Model
-    delegate :label, :active, :active?, to: :model
-
-    def other_supervisor_id
-      model&.other_supervisor_proto_id
-    end
-
-    def person_id
-      model&.person_proto_id
-    end
+    # delegate :label, :active, :active?, to: :model
+    #
+    # def other_supervisor_id
+    #   model&.other_supervisor_proto_id
+    # end
+    #
+    # def person_id
+    #   model&.person_proto_id
+    # end
 
     def self.new_from_model(model)
-      wrapper = Connection.new
+      wrapper = Team.new
       wrapper.send(:model=, model)
       wrapper
     end
@@ -48,7 +48,7 @@ module Connections
 
     def self.find_for(effective_date)
       models = Model.find_for(effective_date)
-      models.map{ |model| Connection.new_from_model(model) }
+      models.map{ |model| Team.new_from_model(model) }
     end
 
     def self.delete_all
@@ -57,9 +57,9 @@ module Connections
 
     def as_json(options = nil)
       {
-        from: person_id,
-        to: other_supervisor_id,
-        label: label,
+        # from: person_id,
+        # to: other_supervisor_id,
+        # label: label,
       }
     end
 

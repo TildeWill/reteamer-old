@@ -135,7 +135,16 @@ export default class extends Controller {
             d += " " + mouse[0] + "," + 0;
             return d;
           });
-        d3.select("#effective_date").attr("value", xDate.toISOString().split('T')[0]).dispatch('change');
+        let newDate = xDate.toISOString().split('T')[0];
+        // d3.select("#effective_date").attr("value", newDate).dispatch('change');
+        const dateChangedEvent = new CustomEvent("datePicked",
+          {
+            detail: {
+              newDate: newDate
+            }
+          }
+        )
+        window.dispatchEvent(dateChangedEvent)
       })
       .on('mousemove', function(event) { // mouse moving over canvas
         var mouse = d3.pointer(event);

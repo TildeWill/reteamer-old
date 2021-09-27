@@ -13,9 +13,9 @@ module People
     end
 
     def self.new_from_model(model)
-      person = Person.new
-      person.send(:model=, model)
-      person
+      wrapper = Person.new
+      wrapper.send(:model=, model)
+      wrapper
     end
 
     def self.create(effective_date, attributes)
