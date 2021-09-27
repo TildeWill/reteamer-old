@@ -95,50 +95,12 @@ export default class extends Controller {
       .attr("transform", "translate(10,13)")
       .attr("class", "cursor-date")
 
-
-    this.renderChart();
-  }
-
-  renderChart() {
-    const self = this;
-    const data = self.histogram;
-
-    this.xExtent = d3.extent(data, function(d) {
-      return d.date;
-    });
-
-    self.x.domain(
-      [
-        new Date(self.xExtent[0]).setDate(new Date(self.xExtent[0]).getDate()-30),
-        new Date(self.xExtent[1]).setDate(new Date(self.xExtent[1]).getDate()+30)
-      ]
-    );
-
-    self.y.domain([
-      0,
-      d3.max(data, function(d) {
-        return d.value;
-      })
-    ]);
-
-    self.xAxisElement.call(self.xAxis);
-
-    this.svg
-      .selectAll("rect")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("fill", "steelblue")
-      .attr("height", d => self.height - self.y(d.value))
-      .attr("width", 10)
-      .attr("x", (d, i) => self.x(d.date))
-      .attr("y", d => self.y(d.value))
-
-    self.chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
+    self.mouseMovementRectangle = self.chartCursor.append('svg:rect') // append a rect to catch mouse movements on canvas
       .attr('width', self.width) // can't catch mouse events on a g element
       .attr('height', self.height)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
+    self.mouseMovementRectangle
       .on('mouseout', function() { // on mouse out hide line, circles and text
         d3.select(".cursor-line")
           .style("opacity", "0");
@@ -182,5 +144,44 @@ export default class extends Controller {
             return "translate(" + mouse[0] + ",0)";
           });
       });
+
+    this.renderChart();
+  }
+
+  renderChart() {
+    const self = this;
+    const data = self.histogram;
+
+    this.xExtent = d3.extent(data, function(d) {
+      return d.date;
+    });
+
+    self.x.domain(
+      [
+        new Date(self.xExtent[0]).setDate(new Date(self.xExtent[0]).getDate()-30),
+        new Date(self.xExtent[1]).setDate(new Date(self.xExtent[1]).getDate()+30)
+      ]
+    );
+
+    self.y.domain([
+      0,
+      d3.max(data, function(d) {
+        return d.value;
+      })
+    ]);
+
+    self.xAxisElement.call(self.xAxis);
+
+    this.svg
+      .selectAll(".change-counts")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("class", "change-counts")
+      .attr("fill", "steelblue")
+      .attr("height", d => self.height - self.y(d.value))
+      .attr("width", 10)
+      .attr("x", (d, i) => self.x(d.date))
+      .attr("y", d => self.y(d.value))
   }
 }
