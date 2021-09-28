@@ -3,6 +3,7 @@ module People
   class Person
     include ActiveModel::Model
     delegate :first_name, :last_name, :title, :email, :active?, :image_url, :contractor, :contractor?, :employee_id, to: :model
+    has_person_name
 
     def id
       model&.proto_id
@@ -75,6 +76,11 @@ module People
     def self.find_for(effective_date)
       models = Model.find_for(effective_date)
       models.map{ |model| Person.new_from_model(model) }
+    end
+
+    def self.any?(effective_date, person_proto_id)
+      models = Model.where(proto_id: person_proto_id).find_for(effective_date)
+      models.present?
     end
 
     def self.histogram

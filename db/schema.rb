@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_203910) do
+ActiveRecord::Schema.define(version: 2021_09_27_212152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 2021_09_24_203910) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "assignments", force: :cascade do |t|
+    t.string "person_proto_id", null: false
+    t.string "team_proto_id", null: false
+    t.string "role_on_team"
+    t.string "proto_id", null: false
+    t.datetime "effective_at", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at"
   end
 
   create_table "connections", force: :cascade do |t|
@@ -112,6 +122,15 @@ ActiveRecord::Schema.define(version: 2021_09_24_203910) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_services_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "parent_proto_id"
+    t.string "proto_id", null: false
+    t.datetime "effective_at", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at"
   end
 
   create_table "users", force: :cascade do |t|

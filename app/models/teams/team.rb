@@ -1,15 +1,15 @@
 module Teams
   class Team
     include ActiveModel::Model
-    # delegate :label, :active, :active?, to: :model
-    #
-    # def other_supervisor_id
-    #   model&.other_supervisor_proto_id
-    # end
-    #
-    # def person_id
-    #   model&.person_proto_id
-    # end
+    delegate :name, :active, :active?, to: :model
+
+    def id
+      model&.proto_id
+    end
+
+    def parent_id
+      model&.parent_proto_id
+    end
 
     def self.new_from_model(model)
       wrapper = Team.new
@@ -19,20 +19,19 @@ module Teams
 
     def self.create(effective_date, attributes)
       model = Model.new({
-        person_proto_id: attributes[:person_id],
-        other_supervisor_proto_id: attributes[:other_supervisor_id],
+        name: attributes[:name],
+        parent_proto_id: attributes[:parent_proto_id],
         active: attributes[:active] || true,
-        label: attributes[:label]
       })
       model.meta = Meta.new_prototype(effective_date, Model)
       model.save
-      Connection.new_from_model(model)
+      Team.new_from_model(model)
     end
 
     def update(effective_date, attributes)
       new_attributes = {
-        person_proto_id: attributes.fetch(:person_id, person_id),
-        other_supervisor_proto_id: attributes.fetch(:other_supervisor_id, other_supervisor_id),
+        name: attributes.fetch(:name, name),
+        parent_proto_id: attributes.fetch(:parent_proto_id, parent_id),
         active: attributes.fetch(:active, active)
       }
       new_model = Model.new(new_attributes)
@@ -51,15 +50,19 @@ module Teams
       models.map{ |model| Team.new_from_model(model) }
     end
 
+    def self.any?(effective_date, person_proto_id)
+      models = Model.where(proto_id: person_proto_id).find_for(effective_date)
+      models.present?
+    end
+
     def self.delete_all
       Model.delete_all
     end
 
     def as_json(options = nil)
       {
-        # from: person_id,
-        # to: other_supervisor_id,
-        # label: label,
+        name: name,
+        parent_id: parent_id,
       }
     end
 
