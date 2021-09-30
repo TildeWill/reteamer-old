@@ -8,8 +8,8 @@ Connections::Connection.delete_all
 Teams::Team.delete_all
 Assignments::Assignment.delete_all
 
-User.create(first_name: "Will", last_name: "Read", email: "will.read@gmail.com", admin: true, password: 'password', password_confirmation: 'password')
+User.create(first_name: "30", last_name: "Rock", email: "demo@30rock.com", admin: true, password: 'password', password_confirmation: 'password')
+User.create(first_name: "Marvel", last_name: "Comics", email: "demo@mcu.com", admin: true, password: 'password', password_confirmation: 'password')
 
-Dir[File.join(Rails.root, 'db', 'seeds', '*.rb')].sort.each do |seed|
-  load seed
-end
+load File.join(Rails.root, 'db', 'seeds', '30rock.rb')
+load File.join(Rails.root, 'db', 'seeds', 'MCU.rb')
